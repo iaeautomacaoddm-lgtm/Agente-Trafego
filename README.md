@@ -1,31 +1,22 @@
-================================================================================
-INSTRUÇÕES DE USO — DASHBOARD DDM AGENTS
-================================================================================
 
-================================================================================
 1. PRÉ-REQUISITOS
-================================================================================
 
 ✓ Node.js v18+ instalado
 ✓ npm instalado
 ✓ Hermes CLI disponível no PATH (para execução real dos agentes)
 
 
-================================================================================
 2. INSTALAÇÃO
-================================================================================
 
 # Na pasta do dashboard
 cd dashboard
 npm install
 
 
-================================================================================
+
 3. INICIAR O SISTEMA
-================================================================================
 
 OPÇÃO A: Tudo junto (recomendado)
-─────────────────────────────────
 npm run dev
 
 # Isso inicia:
@@ -34,7 +25,6 @@ npm run dev
 
 
 OPÇÃO B: Separadamente (para debug)
-───────────────────────────────────
 # Terminal 1 - Backend
 npm run server
 
@@ -43,13 +33,11 @@ npm run client
 
 
 OPÇÃO C: Windows (clique duplo)
-───────────────────────────────
 Executar: start.bat
 
 
-================================================================================
+
 4. ACESSAR
-================================================================================
 
 Abrir no navegador: http://localhost:5173
 
@@ -60,19 +48,15 @@ O dashboard mostrará:
 - Modal para executar agente individual
 
 
-================================================================================
 5. USAR OS AGENTES
-================================================================================
 
 VIA DASHBOARD:
-──────────────
 1. Clique em um card de agente
 2. Digite o input no modal
 3. Clique "Enviar"
 4. Veja o output na mesma tela
 
 VIA API DIRETA:
-───────────────
 # Listar agentes
 curl http://localhost:3001/api/agents
 
@@ -92,9 +76,9 @@ curl -X POST http://localhost:3001/api/agents/flow/analysis \
   -d '{"relatorio": "CTR: 1.2%, CPL: R$45, Conversões: 23..."}'
 
 
-================================================================================
+
 6. ESTRUTURA DE ARQUIVOS
-================================================================================
+
 
 dashboard/
 ├── server/                    # Backend Express
@@ -115,9 +99,7 @@ dashboard/
 └── start.sh                  # Script Linux/Mac
 
 
-================================================================================
 7. API ENDPOINTS
-================================================================================
 
 GET  /api/health              # Health check
 GET  /api/agents              # Lista agentes
@@ -130,9 +112,7 @@ GET  /api/agents/meta/history # Histórico de execuções
 GET  /api/agents/meta/health  # Status do Hermes
 
 
-================================================================================
 8. TROUBLESHOOTING
-================================================================================
 
 PROBLEMA: "API Offline" no dashboard
 SOLUÇÃO:  Verifique se o backend está rodando (npm run server)
@@ -148,14 +128,11 @@ SOLUÇÃO:  Altere PORT no server/index.js ou use:
           PORT=3002 npm run server
 
 
-================================================================================
+
 9. PRÓXIMOS PASSOS
-================================================================================
 
 ☐ Testar execução real com Hermes
 ☐ Adicionar persistência (SQLite/MongoDB)
 ☐ Adicionar autenticação
 ☐ Integrar n8n para automações Meta Ads
 ☐ Deploy em produção
-
-================================================================================
