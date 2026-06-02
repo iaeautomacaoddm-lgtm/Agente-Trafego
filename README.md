@@ -1,138 +1,326 @@
+# Dashboard de Agentes DDM
 
-1. PRÉ-REQUISITOS
+Dashboard web para monitorar e executar agentes por meio de uma interface visual, integrando frontend em React/Vite, backend em Express e execução dos agentes via Hermes CLI.
 
-✓ Node.js v18+ instalado
-✓ npm instalado
-✓ Hermes CLI disponível no PATH (para execução real dos agentes)
+O sistema permite visualizar o status da API, acompanhar agentes disponíveis, executar agentes individualmente e rodar fluxos completos a partir de briefings ou relatórios.
 
+## Visão geral
 
-2. INSTALAÇÃO
+Este projeto possui:
 
-# Na pasta do dashboard
+- Frontend em React com Vite
+- Backend em Node.js com Express
+- Integração com Hermes CLI
+- API REST para execução dos agentes
+- Painel visual para acompanhamento de status
+- Execução individual de agentes
+- Execução de fluxo completo
+- Estrutura preparada para autenticação, persistência e automações futuras
+
+## Pré-requisitos
+
+Antes de iniciar, verifique se você possui instalado:
+
+- Node.js v18 ou superior
+- npm
+- Hermes CLI disponível no PATH, caso deseje executar agentes reais
+
+Para verificar as versões:
+
+```bash
+node -v
+npm -v
+hermes --version
+```
+
+## Instalação
+
+Acesse a pasta do projeto:
+
+```bash
 cd dashboard
+```
+
+Instale as dependências:
+
+```bash
 npm install
+```
 
+## Como iniciar o sistema
 
+### Opção A: iniciar frontend e backend juntos
 
-3. INICIAR O SISTEMA
+Esta é a forma recomendada para uso local.
 
-OPÇÃO A: Tudo junto (recomendado)
+```bash
 npm run dev
+```
 
-# Isso inicia:
-# - Backend Express na porta 3001
-# - Frontend Vite na porta 5173
+Esse comando inicia:
 
+- Backend Express na porta `3001`
+- Frontend Vite na porta `5173`
 
-OPÇÃO B: Separadamente (para debug)
-# Terminal 1 - Backend
+### Opção B: iniciar separadamente para debug
+
+Em um terminal, inicie o backend:
+
+```bash
 npm run server
+```
 
-# Terminal 2 - Frontend
+Em outro terminal, inicie o frontend:
+
+```bash
 npm run client
+```
 
+### Opção C: executar no Windows
 
-OPÇÃO C: Windows (clique duplo)
-Executar: start.bat
+Também é possível iniciar o sistema pelo arquivo:
 
+```bash
+start.bat
+```
 
+## Acesso local
 
-4. ACESSAR
+Após iniciar o sistema, acesse no navegador:
 
-Abrir no navegador: http://localhost:5173
+```text
+http://localhost:5173
+```
 
-O dashboard mostrará:
-- Status da API (online/offline)
-- 4 agentes com status atual
-- Botão "Executar Fluxo Completo"
-- Modal para executar agente individual
+O dashboard exibirá:
 
+- Status da API
+- Status dos agentes
+- Cards dos agentes disponíveis
+- Botão para executar fluxo completo
+- Modal para execução individual de agentes
+- Retorno da execução na própria interface
 
-5. USAR OS AGENTES
+## Como usar os agentes
 
-VIA DASHBOARD:
-1. Clique em um card de agente
-2. Digite o input no modal
-3. Clique "Enviar"
-4. Veja o output na mesma tela
+### Pela interface do dashboard
 
-VIA API DIRETA:
-# Listar agentes
+1. Abra o dashboard no navegador.
+2. Clique em um card de agente.
+3. Digite o input no modal.
+4. Clique em **Enviar**.
+5. Aguarde o processamento.
+6. Veja o resultado na tela.
+
+### Pela API
+
+Também é possível interagir diretamente com a API.
+
+#### Listar agentes
+
+```bash
 curl http://localhost:3001/api/agents
+```
 
-# Executar agente específico
+#### Executar um agente específico
+
+```bash
 curl -X POST http://localhost:3001/api/agents/estrategista/execute \
   -H "Content-Type: application/json" \
   -d '{"input": "Briefing: campanha para re-engajamento..."}'
+```
 
-# Executar fluxo completo
+#### Executar fluxo completo
+
+```bash
 curl -X POST http://localhost:3001/api/agents/flow/full \
   -H "Content-Type: application/json" \
   -d '{"briefing": "Criar campanha para alunos da Faculdade X..."}'
+```
 
-# Análise de dados
+#### Executar análise de dados
+
+```bash
 curl -X POST http://localhost:3001/api/agents/flow/analysis \
   -H "Content-Type: application/json" \
   -d '{"relatorio": "CTR: 1.2%, CPL: R$45, Conversões: 23..."}'
+```
 
+## Estrutura de arquivos
 
-
-6. ESTRUTURA DE ARQUIVOS
-
-
+```text
 dashboard/
-├── server/                    # Backend Express
-│   ├── index.js              # Servidor principal
-│   ├── hermes.js             # Integração com Hermes CLI
+├── server/
+│   ├── index.js
+│   ├── hermes.js
 │   └── routes/
-│       └── agents.js         # Rotas da API
-├── src/                       # Frontend React
+│       └── agents.js
+│
+├── src/
 │   ├── components/
-│   │   ├── Dashboard.jsx     # Dashboard principal
-│   │   ├── AgentPanel.jsx    # Painel dos agentes DDM
-│   │   └── AgentPanel.css    # Estilos
+│   │   ├── Dashboard.jsx
+│   │   ├── AgentPanel.jsx
+│   │   └── AgentPanel.css
+│   │
 │   └── services/
-│       └── AgentService.js   # Cliente da API
-├── package.json              # Dependências
-├── vite.config.js            # Config do Vite + proxy
-├── start.bat                 # Script Windows
-└── start.sh                  # Script Linux/Mac
+│       └── AgentService.js
+│
+├── package.json
+├── vite.config.js
+├── start.bat
+└── start.sh
+```
 
+## Principais diretórios
 
-7. API ENDPOINTS
+### `server/`
 
-GET  /api/health              # Health check
-GET  /api/agents              # Lista agentes
-GET  /api/agents/:id          # Detalhes do agente
-POST /api/agents/:id/execute  # Executa agente
-POST /api/agents/:id/reset    # Reseta status
-POST /api/agents/flow/full    # Fluxo completo
-POST /api/agents/flow/analysis # Análise de dados
-GET  /api/agents/meta/history # Histórico de execuções
-GET  /api/agents/meta/health  # Status do Hermes
+Contém o backend da aplicação.
 
+Arquivos principais:
 
-8. TROUBLESHOOTING
+- `index.js`: servidor principal Express
+- `hermes.js`: camada de integração com o Hermes CLI
+- `routes/agents.js`: rotas da API relacionadas aos agentes
 
-PROBLEMA: "API Offline" no dashboard
-SOLUÇÃO:  Verifique se o backend está rodando (npm run server)
+### `src/`
 
-PROBLEMA: "Hermes Offline" 
-SOLUÇÃO:  Verifique se o Hermes CLI está no PATH (hermes --version)
+Contém o frontend da aplicação.
 
-PROBLEMA: Agente não executa
-SOLUÇÃO:  Verifique se a skill existe (hermes skills list)
+Arquivos principais:
 
-PROBLEMA: Porta 3001 já em uso
-SOLUÇÃO:  Altere PORT no server/index.js ou use:
-          PORT=3002 npm run server
+- `Dashboard.jsx`: tela principal do dashboard
+- `AgentPanel.jsx`: painel visual dos agentes
+- `AgentPanel.css`: estilos dos componentes
+- `AgentService.js`: cliente responsável por consumir a API
 
+## Endpoints da API
 
+| Método | Endpoint | Descrição |
+| --- | --- | --- |
+| GET | `/api/health` | Verifica se a API está online |
+| GET | `/api/agents` | Lista todos os agentes |
+| GET | `/api/agents/:id` | Retorna detalhes de um agente |
+| POST | `/api/agents/:id/execute` | Executa um agente específico |
+| POST | `/api/agents/:id/reset` | Reseta o status de um agente |
+| POST | `/api/agents/flow/full` | Executa o fluxo completo |
+| POST | `/api/agents/flow/analysis` | Executa análise de dados |
+| GET | `/api/agents/meta/history` | Retorna o histórico de execuções |
+| GET | `/api/agents/meta/health` | Verifica o status do Hermes |
 
-9. PRÓXIMOS PASSOS
+## Troubleshooting
 
-☐ Testar execução real com Hermes
-☐ Adicionar persistência (SQLite/MongoDB)
-☐ Adicionar autenticação
-☐ Integrar n8n para automações Meta Ads
-☐ Deploy em produção
+### API aparece como offline no dashboard
+
+Verifique se o backend está rodando:
+
+```bash
+npm run server
+```
+
+Também confirme se a porta `3001` está livre.
+
+### Hermes aparece como offline
+
+Verifique se o Hermes CLI está instalado e disponível no PATH:
+
+```bash
+hermes --version
+```
+
+Se o comando não for reconhecido, será necessário instalar ou configurar o Hermes CLI corretamente no ambiente.
+
+### Agente não executa
+
+Verifique se a skill do agente existe:
+
+```bash
+hermes skills list
+```
+
+Também confira se o ID do agente usado na rota corresponde ao agente cadastrado no sistema.
+
+### Porta 3001 já está em uso
+
+Altere a porta no arquivo:
+
+```text
+server/index.js
+```
+
+Ou inicie o servidor com outra porta:
+
+```bash
+PORT=3002 npm run server
+```
+
+No Windows PowerShell:
+
+```powershell
+$env:PORT=3002; npm run server
+```
+
+## Deploy
+
+Este projeto foi desenvolvido inicialmente para execução local.
+
+Para deploy em produção, é necessário considerar:
+
+- Separação entre frontend e backend
+- Variáveis de ambiente
+- Autenticação
+- Proteção dos endpoints
+- Controle de acesso por usuário ou setor
+- Logs de execução
+- Persistência dos históricos
+- Ambiente seguro para execução do Hermes CLI
+
+Caso o frontend seja publicado separadamente, gere o build com:
+
+```bash
+npm run build
+```
+
+A pasta final será:
+
+```text
+dist/
+```
+
+Essa pasta pode ser publicada em serviços de hospedagem estática.
+
+## Segurança
+
+Este projeto pode lidar com dados internos, briefings, relatórios e informações sensíveis da empresa.
+
+Antes de publicar em qualquer ambiente externo, verifique se:
+
+- O dashboard não está público sem autenticação
+- Não existem tokens ou senhas no código
+- Dados financeiros ou de clientes não estão expostos no frontend
+- Arquivos `.env` não foram enviados ao repositório
+- A API possui controle de acesso
+- Os logs não armazenam informações sensíveis indevidamente
+
+Recomenda-se usar autenticação antes de disponibilizar o sistema para outros setores.
+
+## Próximos passos
+
+- [ ] Testar execução real com Hermes CLI
+- [ ] Adicionar autenticação
+- [ ] Adicionar persistência com SQLite, PostgreSQL ou MongoDB
+- [ ] Salvar histórico de execuções
+- [ ] Criar controle de acesso por setor
+- [ ] Integrar com n8n para automações
+- [ ] Adicionar logs estruturados
+- [ ] Criar ambiente de produção seguro
+- [ ] Configurar deploy do frontend
+- [ ] Configurar deploy do backend
+- [ ] Documentar variáveis de ambiente
+- [ ] Adicionar testes básicos da API
+
+## Status do projeto
+
+Projeto em fase inicial de desenvolvimento e validação local.
+
+A estrutura atual permite testes internos e evolução para uma versão com autenticação, persistência e deploy em ambiente protegido.
